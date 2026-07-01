@@ -13,6 +13,7 @@ pipeline {
             'full': Build AMI, Deploy Infrastructure, and Run Vulnerability Scan
             'image_build': Build AMI only
             'tf_apply_scan': Deploy terraform infrastructure and run vulnerability scan
+            'tf_destroy': Destroy terraform infrastructure
             """
         )
     }
