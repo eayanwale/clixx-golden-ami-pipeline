@@ -59,7 +59,7 @@ pipeline {
          }
 
         stage('Terraform init'){
-            when { expression { params.ACTION == 'full' || params.ACTION == 'tf_apply_scan' } || params.ACTION == 'tf_destroy' }
+            when { expression { params.ACTION == 'full' || params.ACTION == 'tf_apply_scan' || params.ACTION == 'tf_destroy' } }
              steps {
                  slackSend (color: '#FFFF00', message: "STARTING ${action}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                  sh """
