@@ -8,12 +8,11 @@ pipeline {
     parameters {
         choice(
             name: 'ACTION', 
-            choices: ['full', 'image_build', 'tf_apply_scan', 'instance_stop'], 
+            choices: ['full', 'image_build', 'tf_apply_scan'], 
             description: """
             'full': Build AMI, Deploy Infrastructure, and Run Vulnerability Scan
             'image_build': Build AMI only
             'tf_apply_scan': Deploy terraform infrastructure and run vulnerability scan
-            'instance_stop': Stop the deployed instance
             """
         )
     }
@@ -36,6 +35,8 @@ pipeline {
                     action = "PACKER IMAGE BUILD"
                 } else if (params.ACTION == 'tf_apply_scan') {
                     action = "TERRAFORM APPLY AND VULNERABILITY SCAN"
+                } else if (params.ACTION == 'tf_destroy') {
+                    action = "TERRAFORM DESTROY"
                 } else {
                     action = "TINKERING..."
                 }
@@ -58,7 +59,7 @@ pipeline {
          }
 
         stage('Terraform init'){
-            when { expression { params.ACTION == 'full' || params.ACTION == 'tf_apply_scan' } }
+            when { expression { params.ACTION == 'full' || params.ACTION == 'tf_apply_scan' } || params.ACTION == 'tf_destroy' }
              steps {
                  slackSend (color: '#FFFF00', message: "STARTING ${action}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                  sh """
@@ -69,11 +70,11 @@ pipeline {
          }
 
         stage('Terraform Plan'){
-            when { expression { params.ACTION == 'full' || params.ACTION == 'tf_apply_scan' } }
+            when { expression { params.ACTION == 'full' || params.ACTION == 'tf_apply_scan' || params.ACTION == 'tf_destroy' } }
              steps {
                  sh """
                  cd Packer/CLIXX-AMI-BUILD/stackterraform/instances
-                 terraform plan -out=tfplan -input=false ${params.ACTION == 'instance_stop' ? '-destroy' : ''}
+                 terraform plan -out=tfplan -input=false ${params.ACTION == 'tf_destroy' ? '-destroy' : ''}
                  """                          
             }
         }
@@ -111,6 +112,17 @@ pipeline {
                 """
                 archiveArtifacts artifacts: 'Packer/CLIXX-AMI-BUILD/stackterraform/instances/inspector-findings.json', allowEmptyArchive: true
                 slackSend (color: '#1fe139', message: "ENDING ${action}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+            }
+        }
+
+        stage('Destroy Instance'){
+            when { expression { params.ACTION == 'tf_destroy' } }
+             steps {
+                 slackSend (color: '#FFFF00', message: "STARTING ${action}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+                 sh """
+                 cd Packer/CLIXX-AMI-BUILD/stackterraform/instances
+                 terraform destroy -auto-approve
+                 """                          
             }
         }
 
