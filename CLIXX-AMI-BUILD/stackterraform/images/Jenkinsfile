@@ -48,7 +48,7 @@ pipeline {
              steps {
                  slackSend (color: '#FFFF00', message: "STARTING PACKER ${action}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                  sh '''
-                 cd images
+                 cd Packer/CLIXX-AMI-BUILD/stackterraform/images
                  sed -i "s/ami-stack-[0-9]*/${AMI_ID}/" ./image.pkr.hcl
                  export PACKER_LOG=1
                  export PACKER_LOG_PATH=$WORKSPACE/packer.log
@@ -62,7 +62,7 @@ pipeline {
              steps {
                  slackSend (color: '#FFFF00', message: "STARTING ${action}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                  sh """
-                 cd instances
+                 cd Packer/CLIXX-AMI-BUILD/stackterraform/instances
                  terraform init -upgrade 
                  """                  
             }
@@ -72,7 +72,7 @@ pipeline {
             when { expression { params.ACTION == 'full' || params.ACTION == 'tf_apply_scan' } }
              steps {
                  sh """
-                 cd instances
+                 cd Packer/CLIXX-AMI-BUILD/stackterraform/instances
                  terraform plan -out=tfplan -input=false ${params.ACTION == 'instance_stop' ? '-destroy' : ''}
                  """                          
             }
@@ -83,7 +83,7 @@ pipeline {
              steps {
                  slackSend (color: '#FFFF00', message: "STARTING ${action}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                  sh """
-                 cd instances
+                 cd Packer/CLIXX-AMI-BUILD/stackterraform/instances
                  terraform apply -auto-approve
                  """                          
             }
@@ -92,7 +92,7 @@ pipeline {
         //   stage('Run Ansible Playbook'){
         //      steps {
         //          sh """
-        //          cd instances
+        //          cd Packer/CLIXX-AMI-BUILD/stackterraform/instances
         //          ansible -v
         //          """  
         //          slackSend (color: '#FFFF00', message: "ENDING DEPLOYMENT: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")                        
@@ -103,13 +103,13 @@ pipeline {
             when { expression { params.ACTION == 'full' || params.ACTION == 'tf_apply_scan' } }
             steps {
                 sh """
-                cd instances
+                cd Packer/CLIXX-AMI-BUILD/stackterraform/instances
                 aws inspector2 list-findings --region us-east-1 \
                 --query 'findings[].{Title:title,Severity:severity,Resource:resources[0].id}' \
                 --output table
                 aws inspector2 list-findings --region us-east-1 --output json > inspector-findings.json
                 """
-                archiveArtifacts artifacts: 'instances/inspector-findings.json', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'Packer/CLIXX-AMI-BUILD/stackterraform/instances/inspector-findings.json', allowEmptyArchive: true
                 slackSend (color: '#1fe139', message: "ENDING ${action}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
             }
         }
