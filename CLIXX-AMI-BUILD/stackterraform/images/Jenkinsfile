@@ -50,7 +50,7 @@ pipeline {
             steps {
                 aiAgent(
                     agent: claudeCode(),
-                    model: 'claude-sonnet-5', 
+                    model: 'claude-3-5-sonnet', 
                     prompt: 'Scan the project files in the workspace, check for hardcoded secrets, and fix any minor syntax errors in main.tf',
                     yoloMode: false,
                     requireApprovals: true
