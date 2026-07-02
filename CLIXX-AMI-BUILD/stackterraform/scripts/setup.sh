@@ -15,8 +15,7 @@ sudo chmod 2775 /var/www && find /var/www -type d -exec sudo chmod 2775 {} \;
 find /var/www -type f -exec sudo chmod 0664 {} \;
 cd /var/www/html
 
-# sudo sed -i '151s/None/All/' /etc/httpd/conf/httpd.conf
-sed -i '/<Directory "\/var\/www\/html">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/httpd/conf/httpd.conf
+sudo sed -i '151s/None/All/' /etc/httpd/conf/httpd.conf
 
 ##Grant file ownership of /var/www & its contents to apache user
 sudo chown -R apache /var/www
@@ -38,8 +37,3 @@ sudo service httpd restart
 ##Enable httpd
 sudo systemctl enable httpd
 sudo /sbin/sysctl -w net.ipv4.tcp_keepalive_time=200 net.ipv4.tcp_keepalive_intvl=200 net.ipv4.tcp_keepalive_probes=5
-
-##Install WP-CLI
-curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-chmod +x wp-cli.phar
-mv wp-cli.phar /usr/local/bin/wp
