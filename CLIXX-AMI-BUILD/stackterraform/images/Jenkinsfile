@@ -53,8 +53,8 @@ pipeline {
                         agent: claudeCode(),
                         model: 'claude-sonnet-5', 
                         prompt: 'Scan the project files in the workspace, check for hardcoded secrets, and fix any minor syntax errors in main.tf',
-                        yoloMode: false,
-                        requireApprovals: true,
+                        yoloMode: true,
+                        requireApprovals: false,
                         // apiCredentialsId: '${}'
                     )
                 }
