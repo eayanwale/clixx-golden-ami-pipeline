@@ -19,7 +19,7 @@ pipeline {
     }
 
     environment {
-        PATH = "${PATH}:${getTerraformPath()}"
+        PATH = "${PATH}:${getTerraformPath()}:${getNodeJsPath()}/bin"
         AMI_ID="ami-stack-${BUILD_NUMBER}"
         VERSION = "1.0.${BUILD_NUMBER}"
         LLM_API_KEY = credentials('Claude_API')
@@ -160,10 +160,15 @@ pipeline {
     // }
 }
 
- def getTerraformPath(){
-        def tfHome= tool name: 'terraform-1.10', type: 'terraform'
-        return tfHome
-    }
+def getTerraformPath(){
+    def tfHome= tool name: 'terraform-1.10', type: 'terraform'
+    return tfHome
+}
+
+def getNodeJsPath(){
+    def njshome= tool name: 'nodejs26', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
+    return njshome
+}
 
 //  def getAnsiblePath(){
 //         def AnsibleHome= tool name: 'Ansible', type: 'org.jenkinsci.plugins.ansible.AnsibleInstallation'
