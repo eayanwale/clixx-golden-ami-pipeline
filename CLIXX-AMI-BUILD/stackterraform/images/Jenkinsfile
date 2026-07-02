@@ -22,7 +22,7 @@ pipeline {
         PATH = "${PATH}:${getTerraformPath()}:${getNodeJsPath()}/bin"
         AMI_ID="ami-stack-${BUILD_NUMBER}"
         VERSION = "1.0.${BUILD_NUMBER}"
-        LLM_API_KEY = credentials('Claude_API')
+        // LLM_API_KEY = credentials('Claude_API')
     }
 
     stages{
@@ -48,14 +48,16 @@ pipeline {
 
         stage('AI Source Code Audit') {
             steps {
-                aiAgent(
-                    agent: claudeCode(),
-                    model: 'claude-3-5-sonnet', 
-                    prompt: 'Scan the project files in the workspace, check for hardcoded secrets, and fix any minor syntax errors in main.tf',
-                    yoloMode: false,
-                    requireApprovals: true,
-                    apiCredentialsId: '${LLM_API_KEY}'
-                )
+                withCredentials([string(credentialsId: 'Claude_API', variable: 'ANTHROPIC_API_KEY')]) {
+                    aiAgent(
+                        agent: claudeCode(),
+                        model: 'claude-3-5-sonnet', 
+                        prompt: 'Scan the project files in the workspace, check for hardcoded secrets, and fix any minor syntax errors in main.tf',
+                        yoloMode: false,
+                        requireApprovals: true,
+                        // apiCredentialsId: '${}'
+                    )
+                }
             }
         }
 
