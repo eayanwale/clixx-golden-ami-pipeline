@@ -53,7 +53,7 @@ pipeline {
                     model: 'claude-3-5-sonnet', 
                     prompt: 'Scan the project files in the workspace, check for hardcoded secrets, and fix any minor syntax errors in main.tf',
                     yoloMode: false,
-                    requireApprovals: true
+                    requireApprovals: true,
                     apiCredentialsId: ${LLM_API_KEY}
                 )
             }
