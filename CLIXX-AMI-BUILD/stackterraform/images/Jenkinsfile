@@ -51,7 +51,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'Claude_API', variable: 'ANTHROPIC_API_KEY')]) {
                     aiAgent(
                         agent: claudeCode(),
-                        model: 'claude-3-5-sonnet', 
+                        model: 'claude-sonnet-5', 
                         prompt: 'Scan the project files in the workspace, check for hardcoded secrets, and fix any minor syntax errors in main.tf',
                         yoloMode: false,
                         requireApprovals: true,
