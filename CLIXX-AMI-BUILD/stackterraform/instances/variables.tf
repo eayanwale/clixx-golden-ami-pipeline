@@ -12,21 +12,21 @@ variable "environment_tag" {
   default     = "Automation"
 }
 
-variable "region"{
+variable "region" {
   description = "The region Terraform deploys your instance"
   default     = "us-east-1"
 }
 
-variable "vpc_id"{
-    default="vpc-00000000000000001"
+variable "vpc_id" {
+  default = "vpc-00000000000000001"
 }
 
 variable "subnets" {
   type = list(string)
-  default=[
+  default = [
     "subnet-0000000000000001",
     "subnet-0000000000000002"
-   ]
+  ]
 }
 
 variable "PATH_TO_PUBLIC_KEY" {
