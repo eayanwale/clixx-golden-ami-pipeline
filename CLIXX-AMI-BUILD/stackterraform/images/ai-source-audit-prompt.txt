@@ -29,9 +29,11 @@ message, tag message, PR title, or PR body.
     user.name "AI Source Code Audit Bot". Don't overwrite existing values.
 
 3.2 Compute names:
-    SANITIZED_JOB = lowercase $JOB_NAME with every run of non [a-z0-9]
+    SANITIZED_JOB = lowercase $JOB_BASE_NAME with every run of non [a-z0-9]
       characters replaced by '-', trimmed of leading/trailing '-'
-    BRANCH = "fix/${SANITIZED_JOB}-${BUILD_NUMBER}-$(date -u +%Y-%m-%d)"
+      (JOB_BASE_NAME is the job's own name without parent folder/path
+      segments, unlike JOB_NAME)
+    BRANCH = "claude-fix/${SANITIZED_JOB}-${BUILD_NUMBER}-$(date -u +%Y-%m-%d)"
     TAG = "v${VERSION}"
 
 3.3 Branch collision: check local (`git rev-parse --verify --quiet`) and
