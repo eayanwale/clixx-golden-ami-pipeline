@@ -21,8 +21,7 @@ tag_created=false, pr_url="", git_push_status="skipped", and go straight to
 OUTPUT. Otherwise continue. If any sub-step below fails as described, do not
 retry indefinitely — record the failure in the relevant output field and stop
 attempting further git/gh actions, then still emit OUTPUT.
-Never print $ANTHROPIC_API_KEY or $GH_TOKEN in any command output, commit
-message, tag message, PR title, or PR body.
+Never print the ANTHROPIC_API_KEY or GH_TOKEN credential values in any command output, message, tag message, PR title, or PR body.
 
 3.1 Git identity: if `git config user.email`/`user.name` are unset, set them
     locally only (not --global): user.email "ai-source-audit@ci.local",
