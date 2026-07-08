@@ -102,7 +102,6 @@ pipeline {
         stage('Terraform init') {
             when { expression { params.ACTION == 'full' || params.ACTION == 'tf_apply_scan' || params.ACTION == 'tf_destroy' } }
              steps {
-                 slackSend (color: '#FFFF00', message: "runner: ${runner}, STARTING ${action}: Job '${env.JOB_BASE_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                  sh """
                  cd CLIXX-AMI-BUILD/stackterraform/instances
                  terraform init -upgrade 
@@ -123,7 +122,6 @@ pipeline {
         stage('Build Instance') {
             when { expression { params.ACTION == 'full' || params.ACTION == 'tf_apply_scan' } }
              steps {
-                 slackSend (color: '#FFFF00', message: "runner: ${runner}, STARTING ${action}: Job '${env.JOB_BASE_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                  sh """
                  cd CLIXX-AMI-BUILD/stackterraform/instances
                  terraform apply -auto-approve
@@ -168,22 +166,22 @@ pipeline {
         }
     }
 
-    // post {
-    //     failure {
-    //         slackSend(
-    //             channel: '#deployments',
-    //             color: 'danger',
-    //             message: "FAILED: ${env.JOB_BASE_NAME} #${env.BUILD_NUMBER} (${env.BUILD_URL})"
-    //         )
-    //     }
-    //     success {
-    //         slackSend(
-    //             channel: '#deployments',
-    //             color: 'good',
-    //             message: "SUCCESS: ${env.JOB_BASE_NAME} #${env.BUILD_NUMBER}"
-    //         )
-    //     }
-    // }
+    post {
+        failure {
+            slackSend(
+                channel: '#stackjenkins',
+                color: 'danger',
+                message: "FAILED: ${env.JOB_BASE_NAME} #${env.BUILD_NUMBER} (${env.BUILD_URL})"
+            )
+        }
+        success {
+            slackSend(
+                channel: '#stackjenkins',
+                color: 'good',
+                message: "SUCCESS: ${env.JOB_BASE_NAME} #${env.BUILD_NUMBER}"
+            )
+        }
+    }
 }
 
 def getTerraformPath(){
