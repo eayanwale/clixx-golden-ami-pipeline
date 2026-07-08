@@ -178,7 +178,7 @@ pipeline {
             slackSend(
                 channel: '#stackjenkins',
                 color: 'good',
-                message: "SUCCESS: ${env.JOB_BASE_NAME} #${env.BUILD_NUMBER}"
+                message: "SUCCESS: ${env.JOB_BASE_NAME} #${env.BUILD_NUMBER} (${env.BUILD_URL})"
             )
         }
     }
