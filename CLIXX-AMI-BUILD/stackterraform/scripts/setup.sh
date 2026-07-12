@@ -17,7 +17,7 @@ sudo usermod -a -G apache ec2-user
 
 ## Download and install WP-CLI globally using sudo to avoid permission blocks
 cd /tmp
-+sudo curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+sudo curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 sudo chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
 
