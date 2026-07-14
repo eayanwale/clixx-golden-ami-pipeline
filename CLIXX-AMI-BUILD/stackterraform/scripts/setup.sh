@@ -4,7 +4,10 @@ sudo yum update -y
 sudo yum install git -y
 sudo amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
 sudo yum install -y httpd mariadb-server
-sudo yum install -y php-gd php-mbstring php-xml php-mysqlnd nfs-utils git
+sudo yum install -y php-gd php-mbstring php-xml php-mysqlnd nfs-utils git unzip
+
+## Pre-fetch wp-force-login plugin so instances don't need network access to wordpress.org at boot
+sudo curl -L -o /opt/wp-force-login.zip https://downloads.wordpress.org/plugin/wp-force-login.zip
 
 ## Modify Apache configuration safely
 sudo sed -i '151s/None/All/' /etc/httpd/conf/httpd.conf
