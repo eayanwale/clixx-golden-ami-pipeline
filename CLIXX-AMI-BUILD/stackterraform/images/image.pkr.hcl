@@ -40,6 +40,7 @@ variable "aws_region" {
 }
 
 data "amazon-ami" "al2" {
+  region = "${var.aws_region}"
   filters = {
     name                = "amzn2-ami-hvm-*-x86_64-gp2"
     root-device-type    = "ebs"
