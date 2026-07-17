@@ -58,8 +58,8 @@ provider "aws" {
 # }
 
 resource "aws_key_pair" "Stack_KP" {
-  key_name   = "stackkp"
-  public_key = file(var.PATH_TO_PUBLIC_KEY)
+    key_name = "stackkp"
+  public_key   =  file(var.PATH_TO_PUBLIC_KEY)
 }
 
 
@@ -79,7 +79,7 @@ resource "aws_security_group" "sg_22_80" {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0",]
   }
 
   ingress {
