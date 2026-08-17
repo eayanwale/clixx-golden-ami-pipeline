@@ -37,7 +37,6 @@ variable "ami_name" {
   default = "ami-stack-5"
 }
 
-# TEST FIXTURE — fake/non-functional creds for AI audit pipeline testing (AWS's public "EXAMPLE" values)
 variable "test_aws_access_key" {
   default = "AKIA_PLACEHOLDER_EXAMPLE"
 }
