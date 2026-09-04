@@ -36,11 +36,3 @@ variable "PATH_TO_PUBLIC_KEY" {
 variable "ami_name" {
   default = "ami-stack-5"
 }
-
-variable "test_aws_access_key" {
-  default = "AKIA_PLACEHOLDER_EXAMPLE"
-}
-
-variable "test_aws_secret_key" {
-    default    =  "PLACEHOLDER_SECRET_KEY_EXAMPLE_VALUE"
-}
